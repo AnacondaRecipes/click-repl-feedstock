@@ -18,6 +18,8 @@ requirements:
   host:
     - python
     - pip
+    - setuptools
+    - wheel
   run:
     - click
     - prompt_toolkit
@@ -27,9 +29,14 @@ requirements:
 test:
   imports:
     - click_repl
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
   home: https://github.com/untitaker/click-repl
+  dev_url: https://github.com/untitaker/click-repl
   license: MIT
   license_family: MIT
   license_file: LICENSE
