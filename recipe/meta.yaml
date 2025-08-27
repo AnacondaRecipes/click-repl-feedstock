@@ -1,18 +1,21 @@
 {% set name = "click-repl" %}
-{% set version = "0.2.0" %}
+{% set version = "0.3.0" %}
 
 package:
-  name: "{{ name|lower }}"
-  version: "{{ version }}"
+  name: {{ name|lower }}
+  version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: cd12f68d745bf6151210790540b4cb064c7b13e571bc64b6957d98d120dacfd8
+  - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+    sha256: 17849c23dba3d667247dc4defe1757fff98694e90fe37474f3feebb69ced26a9
+  - url: https://github.com/click-contrib/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+    sha256: 7dd66878c5b7b41ac790775d82b8fccdfdb1deb80d6c95306e90ad3e8c3538ed
+    folder: gh
 
 build:
   number: 0
-  noarch: python
-  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<36]
 
 requirements:
   host:
@@ -21,22 +24,27 @@ requirements:
     - setuptools
     - wheel
   run:
-    - click
-    - prompt_toolkit
+    # Tests doesn't work with the latest click 8.2.1 on the channel
+    # Upper bound added. Check tests during next version bump.
+    - click >=7.0,<8.2.1
+    - prompt_toolkit >=3.0.36
     - python
-    - six
 
 test:
+  source_files:
+    - gh/tests
   imports:
     - click_repl
   requires:
     - pip
+    - pytest >=7.2.1
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest gh/tests
 
 about:
-  home: https://github.com/untitaker/click-repl
-  dev_url: https://github.com/untitaker/click-repl
+  home: https://github.com/click-contrib/click-repl
   license: MIT
   license_family: MIT
   license_file: LICENSE
@@ -45,6 +53,8 @@ about:
     click-repl turns a click-based application into a REPL, enabling
     multiple commands to be executed in single session, with a single
     shared context. Supports tab completion and command history.
+  dev_url: https://github.com/click-contrib/click-repl
+  doc_url: https://github.com/click-contrib/click-repl/blob/master/README.md
 
 extra:
   recipe-maintainers:
