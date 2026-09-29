@@ -1,21 +1,21 @@
 {% set name = "click-repl" %}
-{% set version = "0.3.0" %}
+{% set version = "0.4.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: 17849c23dba3d667247dc4defe1757fff98694e90fe37474f3feebb69ced26a9
+  - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_') }}-{{ version }}.tar.gz
+    sha256: 52f8962ff0fdae8105d568123b144951257b6bfcfb44ff6f043379c307d0a8ac
   - url: https://github.com/click-contrib/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 7dd66878c5b7b41ac790775d82b8fccdfdb1deb80d6c95306e90ad3e8c3538ed
+    sha256: 2459c846a46476789a0087a4a77606881e5b4dd18f63b91aa896a3799bd1342c
     folder: gh
 
 build:
   number: 0
+  skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: true  # [py<36]
 
 requirements:
   host:
@@ -24,11 +24,10 @@ requirements:
     - setuptools
     - wheel
   run:
-    # Tests doesn't work with the latest click 8.2.1 on the channel
-    # Upper bound added. Check tests during next version bump.
-    - click >=7.0,<8.2.1
-    - prompt_toolkit >=3.0.36
     - python
+    - click >=7.0,<9.0
+    - prompt_toolkit >=3.0.36
+    - typing_extensions >=4.7.0
 
 test:
   source_files:
