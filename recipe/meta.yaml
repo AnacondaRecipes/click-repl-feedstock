@@ -1,5 +1,5 @@
 {% set name = "click-repl" %}
-{% set version = "0.4.0" %}
+{% set version = "0.4.1" %}
 
 package:
   name: {{ name }}
@@ -7,9 +7,9 @@ package:
 
 source:
   - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_') }}-{{ version }}.tar.gz
-    sha256: 52f8962ff0fdae8105d568123b144951257b6bfcfb44ff6f043379c307d0a8ac
+    sha256: c32a1cf6f95e5bd6e92076f81ce24eafd33f2f0ffb0135887e335b8e446d1c0b
   - url: https://github.com/click-contrib/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 2459c846a46476789a0087a4a77606881e5b4dd18f63b91aa896a3799bd1342c
+    sha256: b393a134da532580e1fb9e43a035a935f7185d1372ddef4d435b42e25d1aebc5
     folder: gh
 
 build:
